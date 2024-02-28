@@ -1,10 +1,11 @@
 from typing import List
 
 from src.domain.room import Room
+from src.repository.interface import IRepo
 
 
 class RoomListUseCase:
-    def __init__(self, repo):
+    def __init__(self, repo: IRepo):
         self._repo = repo
 
 
