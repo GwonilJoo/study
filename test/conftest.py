@@ -2,7 +2,10 @@ import uuid
 import random
 from typing import List
 
+from fastapi.testclient import TestClient
+
 from src.domain.room import Room
+from application.app import create_app
 
 
 class Fixture:
@@ -24,7 +27,7 @@ class Fixture:
     def room_dicts(num_of_rooms: int) -> List[Room]:
         return [
             {
-                "code": uuid.uuid4(),
+                "code": str(uuid.uuid4()),
                 "size": random.randint(50, 500),
                 "price": random.randint(10, 100),
                 "longitude": random.random(),
@@ -32,3 +35,9 @@ class Fixture:
             }
             for _ in range(num_of_rooms)
         ]
+    
+
+    @staticmethod
+    def client() -> TestClient:
+        app = create_app("test")
+        return TestClient(app)
