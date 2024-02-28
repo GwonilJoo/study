@@ -1,10 +1,6 @@
-import uuid
 from unittest import TestCase, mock
-from typing import List
-import random
 
 from test.conftest import Fixture
-from src.domain.room import Room
 from src.use_cases.room_list import RoomListUseCase
 
 
@@ -12,6 +8,7 @@ class TestRoomListUseCase(TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.domain_rooms = Fixture.domain_rooms(4)
+
 
     def setUp(self) -> None:
         print(f"[START] {self.__class__.__name__} - {self._testMethodName}")
