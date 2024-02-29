@@ -9,5 +9,5 @@ class MemRepo(IRepo):
         self._data = data
 
     
-    def list(self) -> List[Room]:
+    def list(self, filters: Dict[str, Any] = {}) -> List[Room]:
         return [Room.from_dict(x) for x in self._data]
