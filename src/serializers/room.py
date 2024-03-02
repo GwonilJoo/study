@@ -4,7 +4,7 @@ from src.domain.room import Room
 
 
 class RoomJsonEncoder(json.JSONEncoder):
-    def default(self, o: Room) -> json:
+    def default(self, o: Room):
         try:
             to_serialize = {
                 'code': str(o.code),

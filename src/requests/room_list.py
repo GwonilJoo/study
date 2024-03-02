@@ -5,6 +5,10 @@ from collections.abc import Mapping
 import uuid
 from typing import Dict, Any
 
+from pydantic import BaseModel
+
+from src.repository.interface import Filters
+
 
 class RoomListRequest:
     accepted_filters = {"code__eq", "price__eq", "price__lt", "price__gt"}
@@ -25,18 +29,39 @@ class RoomListRequest:
             
             if invalid_request.has_erros():
                 return invalid_request
-        
-        return RoomListValidRequest(filters)
+
+        # return RoomListValidRequest(
+        #     code__eq=filters.get("code__eq", None),
+        #     price__eq=filters.get("price__eq", None),
+        #     price__lt=filters.get("price__lt", None),
+        #     price__gt=filters.get("price__gt", None),
+        # )
+        return RoomListValidRequest(filters=Filters(**filters))
 
 
     def __bool__(self) -> bool:
         return True
     
 
-class RoomListValidRequest:
-    def __init__(self, filters: Dict[str, Any]) -> None:
-        self.filters = filters
+# class RoomListValidRequest:
+#     def __init__(self, filters: Dict[str, Any]) -> None:
+#         self.filters = filters
 
+
+#     def __bool__(self) -> bool:
+#         return True
+    
+
+# class Filters(BaseModel):
+#     code__eq: uuid.UUID | None = None
+#     price__eq: int | None = None
+#     price__lt: int | None = None
+#     price__gt: int | None = None
+
+
+class RoomListValidRequest:
+    def __init__(self, filters: Filters) -> None:
+        self.filters = filters
 
     def __bool__(self) -> bool:
         return True

@@ -18,6 +18,7 @@ class RoomListUseCase:
         if not request:
             return ResponseFailure.from_invalid_request(request)
         try:
+            print(request.filters)
             rooms = self._repo.list(filters=request.filters)
             return ResponseSuccess(rooms)
         except Exception as e:

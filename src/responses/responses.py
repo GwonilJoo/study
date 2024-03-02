@@ -4,7 +4,7 @@ from src.requests.room_list import RoomListInvalidRequest
 
 
 class ResponseTypes:
-    PARAMETER_ERROR = "ParameterError"
+    PARAMETERS_ERROR = "ParametersError"
     RESOURCE_ERROR = "ResourceError"
     SYSTEM_ERROR = "SystemError"
     SUCCESS = "Success"
@@ -34,7 +34,7 @@ class ResponseFailure:
     @classmethod
     def from_invalid_request(cls, invalid_request: RoomListInvalidRequest) -> ResponseFailure:
         message = "\n".join([f"{err['parameter']}: {err['message']}" for err in invalid_request.errors])
-        return cls(ResponseTypes.PARAMETER_ERROR, message)
+        return cls(ResponseTypes.PARAMETERS_ERROR, message)
 
 
 class ResponseSuccess:

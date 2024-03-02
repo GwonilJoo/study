@@ -1,78 +1,54 @@
-from unittest import TestCase
+import pytest
 
 from src.requests.room_list import RoomListRequest
 
 
-class TestRoomListRequest(TestCase):
-    @classmethod
-    def setUpClass(cls) -> None:
-        pass
+# def test_build_room_list_request_without_parameters(self):
+#     request = RoomListRequest.from_dict({})
+
+#     self.assertTrue(bool(request))
 
 
-    def setUp(self) -> None:
-        print(f"[START] {self.__class__.__name__} - {self._testMethodName}")
+def test_build_room_list_request_from_empty_dict():
+    request = RoomListRequest.from_dict({})
+
+    assert request.filters == {}
+    assert bool(request) is True
 
 
-    def tearDown(self) -> None:
-        print(f"[Done] {self.__class__.__name__} - {self._testMethodName}\n")
+def test_build_room_list_request_with_invalid_filters_parameter():
+    request = RoomListRequest.from_dict(5)
+
+    assert request.has_erros() is True
+    for error in request.errors:
+        assert error["parameter"] == "filters"
+    assert bool(request) is False
 
 
-    # def test_build_room_list_request_without_parameters(self):
-    #     request = RoomListRequest.from_dict({})
+def test_build_room_list_request_with_incorrect_filters_keys():
+    request = RoomListRequest.from_dict({"a": 1})
 
-    #     self.assertTrue(bool(request))
-
-
-    def test_build_room_list_request_from_empty_dict(self):
-        request = RoomListRequest.from_dict({})
-
-        self.assertEqual(request.filters, {})
-        self.assertTrue(bool(request))
+    assert request.has_erros() is True
+    for error in request.errors:
+        assert error["parameter"] == "filters"
+    assert bool(request) is False
 
 
-    def test_build_room_list_request_with_invalid_filters_parameter(self):
-        request = RoomListRequest.from_dict(5)
+@pytest.mark.parametrize("key", ["code__eq", "price__eq", "price__lt", "price__gt"])
+def test_build_room_list_request_with_accepted_filters(key):
+    filters = {key: 1}
+    request = RoomListRequest.from_dict(filters)
 
-        self.assertTrue(request.has_erros())
-        for error in request.errors:
-            self.assertEqual(error["parameter"], "filters")
-        self.assertFalse(bool(request))
-
-
-    def test_build_room_list_request_with_incorrect_filters_keys(self):
-        request = RoomListRequest.from_dict({"a": 1})
-
-        self.assertTrue(request.has_erros())
-        for error in request.errors:
-            self.assertEqual(error["parameter"], "filters")
-        self.assertFalse(bool(request))
+    assert request.filters == filters
+    assert bool(request) is True
 
 
-    def test_build_room_list_request_with_accepted_filters(self):
-        keys = ["code__eq", "price__eq", "price__lt", "price__gt"]
+@pytest.mark.parametrize("key", ["code__lt", "code__gt"])
+def test_build_room_list_request_with_rejected_filters(key):
+    filters = {key: 1}
+    request = RoomListRequest.from_dict(filters)
 
-        def test(key: str):
-            filters = {key: 1}
-            request = RoomListRequest.from_dict(filters)
-
-            self.assertEqual(request.filters, filters)
-            self.assertTrue(bool(request))
-        
-        for key in keys:
-            test(key)
-
-
-    def test_build_room_list_request_with_rejected_filters(self):
-        keys = ["code__lt", "code__gt"]
-
-        def test(key: str):
-            filters = {key: 1}
-            request = RoomListRequest.from_dict(filters)
-
-            self.assertTrue(request.has_erros())
-            for error in request.errors:
-                self.assertEqual(error["parameter"], "filters")
-            self.assertFalse(bool(request))
-        
-        for key in keys:
-            test(key)
+    assert request.has_erros() is True
+    for error in request.errors:
+        assert error["parameter"] == "filters"
+    assert bool(request) is False

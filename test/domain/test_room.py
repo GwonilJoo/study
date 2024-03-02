@@ -1,63 +1,63 @@
-import unittest
-import uuid
-
 from src.domain.room import Room
 
 
-class TestRoomModel(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls) -> None:
-        cls.init_dict = {
-            "code": uuid.uuid4(),
-            "size": 200,
-            "price": 100,
-            "longitude": -0.09942,
-            "latitude": 51.432, 
-        }
+def test_room_model_init(room_dicts):
+    room_dict = room_dicts[0]
+    room = Room(
+        code=room_dict["code"],
+        size=room_dict["size"],
+        price=room_dict["price"],
+        longitude=room_dict["longitude"],
+        latitude=room_dict["latitude"]
+    )
+
+    assert room.code == room_dict["code"]
+    assert room.size == room_dict["size"]
+    assert room.price == room_dict["price"]
+    assert room.longitude == room_dict["longitude"]
+    assert room.latitude == room_dict["latitude"]
 
 
-    def setUp(self) -> None:
-        print(f"[START] {self.__class__.__name__} - {self._testMethodName}")
+def test_room_model_from_dict(room_dicts):
+    room_dict = room_dicts[0]
+    room = Room.model_validate(room_dict)
+
+    assert room.code == room_dict["code"]
+    assert room.size == room_dict["size"]
+    assert room.price == room_dict["price"]
+    assert room.longitude == room_dict["longitude"]
+    assert room.latitude == room_dict["latitude"]
 
 
-    def tearDown(self) -> None:
-        print(f"[Done] {self.__class__.__name__} - {self._testMethodName}\n")
+def test_room_model_to_dict(room_dicts):
+    room_dict = room_dicts[0]
+    room = Room.model_validate(room_dict)
+
+    assert room.model_dump() == room_dict
 
 
-    def test_room_model_init(self):
-        room = Room(
-            code=self.init_dict["code"],
-            size=self.init_dict["size"],
-            price=self.init_dict["price"],
-            longitude=self.init_dict["longitude"],
-            latitude=self.init_dict["latitude"]
-        )
+def test_room_model_comparison(room_dicts):
+    room_dict = room_dicts[0]
+    room1 = Room.model_validate(room_dict)
+    room2 = Room.model_validate(room_dict)
 
-        self.assertEqual(room.code, self.init_dict["code"])
-        self.assertEqual(room.size, self.init_dict["size"])
-        self.assertEqual(room.price, self.init_dict["price"])
-        self.assertEqual(room.longitude, self.init_dict["longitude"])
-        self.assertEqual(room.latitude, self.init_dict["latitude"])
+    assert room1 == room2
 
 
-    def test_room_model_from_dict(self):
-        room = Room.from_dict(self.init_dict)
+def test_room_model_to_json(room_dicts):
+    room_dict = room_dicts[0]
+    room = Room.model_validate(room_dict)
+    
+    json_room = room.model_dump_json()
+    expected_json = f"""{{"code":"{str(room.code)}","size":{room.size},"price":{room.price},"longitude":{room.longitude},"latitude":{room.latitude}}}"""
 
-        self.assertEqual(room.code, self.init_dict["code"])
-        self.assertEqual(room.size, self.init_dict["size"])
-        self.assertEqual(room.price, self.init_dict["price"])
-        self.assertEqual(room.longitude, self.init_dict["longitude"])
-        self.assertEqual(room.latitude, self.init_dict["latitude"])
-
-
-    def test_room_model_to_dict(self):
-        room = Room.from_dict(self.init_dict)
-
-        self.assertEqual(room.to_dict(), self.init_dict)
+    assert json_room == expected_json
 
 
-    def test_room_model_comparison(self):
-        room1 = Room.from_dict(self.init_dict)
-        room2 = Room.from_dict(self.init_dict)
+def test_room_model_from_json(room_dicts):
+    room_dict = room_dicts[0]
+    room = Room.model_validate(room_dict)
 
-        self.assertEqual(room1, room2)
+    json_room = room.model_dump_json()
+    room_from_json = Room.model_validate_json(json_room)
+    assert room == room_from_json
