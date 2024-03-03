@@ -7,6 +7,7 @@ from fastapi.testclient import TestClient
 
 from src.domain.room import Room
 from application.app import create_app
+from application.config import get_config, TestConfig
 
 
 data = [
@@ -55,3 +56,21 @@ def room_dicts() -> List[Dict[str, Any]]:
 def client() -> TestClient:
     app = create_app("test")
     return TestClient(app)
+
+
+def pytest_addoption(parser):
+    parser.addoption(
+        "--integration", action="store_true", help="run integration tests"
+    )
+
+
+def pytest_runtest_setup(item):
+    if "integration" in item.keywords and not item.config.getvalue(
+        "integration"
+    ):
+        pytest.skip("need --integration option to run")
+
+
+@pytest.fixture(scope="session")
+def app_configuration() -> TestConfig:
+    return get_config("test")

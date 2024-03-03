@@ -32,10 +32,6 @@ class RoomListRequest:
         #     price__gt=filters.get("price__gt", None),
         # )
         return RoomListValidRequest(filters)
-
-
-    def __bool__(self) -> bool:
-        return True
     
 
 # class RoomListValidRequest:
