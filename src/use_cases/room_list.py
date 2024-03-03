@@ -1,7 +1,9 @@
 from typing import List
 
 from src.domain.room import Room
-from src.repository.interface import IRepo
+from src.repository.interface import IRepo, Filters
+from src.requests.room_list import RoomListValidRequest, RoomListInvalidRequest
+from src.responses import ResponseTypes, ResponseSuccess, ResponseFailure
 
 
 class RoomListUseCase:
@@ -9,5 +11,14 @@ class RoomListUseCase:
         self._repo = repo
 
 
-    def exec(self) -> List[Room]:
-        return self._repo.list()
+    def exec(
+            self, 
+            request: RoomListValidRequest | RoomListInvalidRequest
+        ) -> ResponseSuccess | ResponseFailure:
+        if not request:
+            return ResponseFailure.from_invalid_request(request)
+        try:
+            rooms = self._repo.list(filters=Filters(**request.filters))
+            return ResponseSuccess(rooms)
+        except Exception as e:
+            return ResponseFailure(ResponseTypes.SYSTEM_ERROR, e)
