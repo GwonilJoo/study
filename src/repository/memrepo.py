@@ -9,7 +9,7 @@ class MemRepo(IRepo):
         self._data = data
 
     
-    def list(self, filters: Filters) -> List[Room]:
+    def list(self, filters: Filters = Filters()) -> List[Room]:
         result = [Room.model_validate(x) for x in self._data]
         
         if filters.code__eq:

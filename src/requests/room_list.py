@@ -2,12 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from collections.abc import Mapping
-import uuid
 from typing import Dict, Any
-
-from pydantic import BaseModel
-
-from src.repository.interface import Filters
 
 
 class RoomListRequest:
@@ -36,7 +31,7 @@ class RoomListRequest:
         #     price__lt=filters.get("price__lt", None),
         #     price__gt=filters.get("price__gt", None),
         # )
-        return RoomListValidRequest(filters=Filters(**filters))
+        return RoomListValidRequest(filters)
 
 
     def __bool__(self) -> bool:
@@ -60,7 +55,7 @@ class RoomListRequest:
 
 
 class RoomListValidRequest:
-    def __init__(self, filters: Filters) -> None:
+    def __init__(self, filters: Dict[str, Any]) -> None:
         self.filters = filters
 
     def __bool__(self) -> bool:

@@ -70,7 +70,6 @@ def room_list(
         if arg.startswith("filter_"):
             qrystr_params["filters"][arg.replace("filter_", "")] = value
 
-    # print(qrystr_params)
     request = RoomListRequest.from_dict(qrystr_params["filters"])
 
     repo = MemRepo(rooms)

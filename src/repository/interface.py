@@ -16,5 +16,5 @@ class Filters(BaseModel):
 
 class IRepo(ABC):
     @abstractmethod
-    def list(self, filters: Filters) -> List[Room]:
+    def list(self, filters: Filters = Filters()) -> List[Room]:
         pass

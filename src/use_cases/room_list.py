@@ -1,7 +1,7 @@
 from typing import List
 
 from src.domain.room import Room
-from src.repository.interface import IRepo
+from src.repository.interface import IRepo, Filters
 from src.requests.room_list import RoomListValidRequest, RoomListInvalidRequest
 from src.responses import ResponseTypes, ResponseSuccess, ResponseFailure
 
@@ -18,8 +18,7 @@ class RoomListUseCase:
         if not request:
             return ResponseFailure.from_invalid_request(request)
         try:
-            print(request.filters)
-            rooms = self._repo.list(filters=request.filters)
+            rooms = self._repo.list(filters=Filters(**request.filters))
             return ResponseSuccess(rooms)
         except Exception as e:
             return ResponseFailure(ResponseTypes.SYSTEM_ERROR, e)

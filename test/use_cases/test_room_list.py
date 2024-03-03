@@ -1,8 +1,10 @@
 from unittest import mock
+import uuid
 
 from src.use_cases.room_list import RoomListUseCase
 from src.requests.room_list import RoomListRequest
 from src.responses import ResponseTypes
+from src.repository.interface import Filters
 
 
 def test_room_list_without_parameters(domain_rooms):
@@ -14,7 +16,7 @@ def test_room_list_without_parameters(domain_rooms):
     response = room_list_use_case.exec(request)
 
     assert bool(response) is True
-    repo.list.assert_called_with(filters={})
+    repo.list.assert_called_with(filters=Filters())
     assert response.value == domain_rooms
 
 
@@ -22,13 +24,13 @@ def test_room_list_with_filters(domain_rooms):
     repo = mock.Mock()
     repo.list.return_value = domain_rooms
 
-    filters = {"code__eq": 5}
+    filters = {"code__eq": str(uuid.uuid4())}
     request = RoomListRequest.from_dict(filters)
     room_list_use_case = RoomListUseCase(repo)
     response = room_list_use_case.exec(request)
 
     assert bool(response) is True
-    repo.list.assert_called_with(filters=filters)
+    repo.list.assert_called_with(filters=Filters(**filters))
     assert response.value == domain_rooms
 
 
