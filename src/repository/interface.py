@@ -8,7 +8,7 @@ from src.domain.room import Room
 
 
 class Filters(BaseModel):
-    code__eq: uuid.UUID | None = None
+    code__eq: str | None = None
     price__eq: int | None = None
     price__lt: int | None = None
     price__gt: int | None = None

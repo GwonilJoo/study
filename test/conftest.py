@@ -12,28 +12,28 @@ from application.config import get_config, TestConfig
 
 data = [
     {
-        "code": uuid.UUID("f853578c-fc0f-4e65-81b8-566c5dffa35a"),
+        "code": "f853578c-fc0f-4e65-81b8-566c5dffa35a",
         "size": random.randint(50, 500),
         "price": 39,
         "longitude": random.random(),
         "latitude": random.random(),
     },
     {
-        "code": uuid.UUID("fe2c3195-aeff-487a-a08f-e0bdc0ec6e9a"),
+        "code": "fe2c3195-aeff-487a-a08f-e0bdc0ec6e9a",
         "size": random.randint(50, 500),
         "price": 66,
         "longitude": random.random(),
         "latitude": random.random(),
     },
     {
-        "code": uuid.UUID("913694c6-435a-4366-ba0d-da5334a611b2"),
+        "code": "913694c6-435a-4366-ba0d-da5334a611b2",
         "size": random.randint(50, 500),
         "price": 60,
         "longitude": random.random(),
         "latitude": random.random(),
     },
     {
-        "code": uuid.UUID("eed76e77-55c1-41ce-985d-ca49bf6c0585"),
+        "code": "eed76e77-55c1-41ce-985d-ca49bf6c0585",
         "size": random.randint(50, 500),
         "price": 48,
         "longitude": random.random(),

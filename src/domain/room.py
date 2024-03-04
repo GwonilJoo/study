@@ -3,7 +3,7 @@ from pydantic import BaseModel
 
 
 class Room(BaseModel):
-    code: uuid.UUID
+    code: str
     size: int
     price: int
     longitude: float

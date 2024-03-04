@@ -28,6 +28,12 @@ class TestConfig(Config):
     POSTGRES_PASSWORD: str = "postgres"
     POSTGRES_APPLICATION_DB: str = "test"
 
+    MONGO_HOST: str = "localhost"
+    MONGO_PORT: int = 27017
+    MONGO_USER: str = "mongo"
+    MONGO_PASSWORD: str = "mongo"
+    MONGO_APPLICATION_DB: str = "test"
+
 
 def get_config(name: str) -> Config:
     if name == "prod":

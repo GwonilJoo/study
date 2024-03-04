@@ -11,7 +11,7 @@ def test_room_model_init(room_dicts):
         latitude=room_dict["latitude"]
     )
 
-    assert room.code == room_dict["code"]
+    assert str(room.code) == room_dict["code"]
     assert room.size == room_dict["size"]
     assert room.price == room_dict["price"]
     assert room.longitude == room_dict["longitude"]
@@ -22,7 +22,7 @@ def test_room_model_from_dict(room_dicts):
     room_dict = room_dicts[0]
     room = Room.model_validate(room_dict)
 
-    assert room.code == room_dict["code"]
+    assert str(room.code) == room_dict["code"]
     assert room.size == room_dict["size"]
     assert room.price == room_dict["price"]
     assert room.longitude == room_dict["longitude"]

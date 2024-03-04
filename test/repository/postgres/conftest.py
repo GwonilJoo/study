@@ -36,7 +36,7 @@ def pg_session_empty(app_configuration: TestConfig):
 def pg_session(pg_session_empty: Session, room_dicts: List[Dict[str, Any]]):
     for room in room_dicts:
         new_room = Room(
-            code=str(room["code"]),
+            code=room["code"],
             size=room["size"],
             price=room["price"],
             longitude=room["longitude"],
