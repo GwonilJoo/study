@@ -31,7 +31,7 @@ def test_memrepo_list_with_price_equal_filter(room_dicts):
     rooms = repo.list(filters=Filters(**filters))
 
     assert len(rooms) == 1
-    assert rooms[0].code == uuid.UUID("913694c6-435a-4366-ba0d-da5334a611b2")
+    assert rooms[0].code == "913694c6-435a-4366-ba0d-da5334a611b2"
 
 
 def test_memrepo_list_with_price_less_than_filter(room_dicts):
@@ -43,8 +43,8 @@ def test_memrepo_list_with_price_less_than_filter(room_dicts):
 
     assert len(rooms) == 2
     assert set([r.code for r in rooms]) == {
-        uuid.UUID("f853578c-fc0f-4e65-81b8-566c5dffa35a"),
-        uuid.UUID("eed76e77-55c1-41ce-985d-ca49bf6c0585"),
+        "f853578c-fc0f-4e65-81b8-566c5dffa35a",
+        "eed76e77-55c1-41ce-985d-ca49bf6c0585",
     }
 
 
@@ -57,8 +57,8 @@ def test_memrepo_list_with_price_greater_than_filter(room_dicts):
 
     assert len(rooms) == 2
     assert set([r.code for r in rooms]) == {
-        uuid.UUID("fe2c3195-aeff-487a-a08f-e0bdc0ec6e9a"),
-        uuid.UUID("913694c6-435a-4366-ba0d-da5334a611b2"),
+        "fe2c3195-aeff-487a-a08f-e0bdc0ec6e9a",
+        "913694c6-435a-4366-ba0d-da5334a611b2",
     }
 
 
@@ -71,4 +71,4 @@ def test_memrepo_list_with_price_between_filter(room_dicts):
     rooms = repo.list(filters=Filters(**filters))
 
     assert len(rooms) == 1
-    assert rooms[0].code == uuid.UUID("913694c6-435a-4366-ba0d-da5334a611b2")
+    assert rooms[0].code == "913694c6-435a-4366-ba0d-da5334a611b2"

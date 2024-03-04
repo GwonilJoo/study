@@ -1,19 +1,38 @@
+import os
+
 class Config:
     """Base configuration"""
 
 
 class ProdConfig(Config):
-    """Base configuration"""
+    """Production configuration"""
 
 
 class DevConfig(Config):
-    """Base configuration"""
+    """Development configuration"""
+    # POSTGRES_HOST: str = "localhost"
+    # POSTGRES_PORT: int = 5433
+    # POSTGRES_USER: str = "postgres"
+    # POSTGRES_PASSWORD: str = "postgres"
+    # POSTGRES_APPLICATION_DB: str = "test"
 
 
 class TestConfig(Config):
-    """Base configuration"""
+    """Test configuration"""
 
     TESTING = True
+
+    POSTGRES_HOST: str = "localhost"
+    POSTGRES_PORT: int = 5433
+    POSTGRES_USER: str = "postgres"
+    POSTGRES_PASSWORD: str = "postgres"
+    POSTGRES_APPLICATION_DB: str = "test"
+
+    MONGO_HOST: str = "localhost"
+    MONGO_PORT: int = 27017
+    MONGO_USER: str = "mongo"
+    MONGO_PASSWORD: str = "mongo"
+    MONGO_APPLICATION_DB: str = "test"
 
 
 def get_config(name: str) -> Config:
