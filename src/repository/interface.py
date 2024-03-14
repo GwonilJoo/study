@@ -5,16 +5,10 @@ import uuid
 from pydantic import BaseModel
 
 from src.domain.room import Room
-
-
-class Filters(BaseModel):
-    code__eq: str | None = None
-    price__eq: int | None = None
-    price__lt: int | None = None
-    price__gt: int | None = None
+from src.dto.room_list import RoomListDto
 
 
 class IRepo(ABC):
     @abstractmethod
-    def list(self, filters: Filters = Filters()) -> List[Room]:
+    def list(self, filters: RoomListDto.Read = RoomListDto.Read()) -> List[Room]:
         pass

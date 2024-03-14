@@ -23,6 +23,13 @@ STATUS_CODE = {
 }
 
 
+responses = {
+    STATUS_CODE[ResponseTypes.SUCCESS]: {
+        "model": List[Room]
+    }
+}
+
+
 rooms = [
     {
         "code": "f853578c-fc0f-4e65-81b8-566c5dffa35a",
@@ -61,6 +68,7 @@ def room_list(
         filter_price__eq: int | None = None, 
         filter_price__lt: int | None = None, 
         filter_price__gt: int | None = None,
+        responses = responses,
     ) -> List[Room]:
     qrystr_params = {
         "filters": {},

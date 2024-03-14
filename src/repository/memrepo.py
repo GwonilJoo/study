@@ -1,7 +1,8 @@
 from typing import Dict, Any, List
 
-from .interface import IRepo, Filters
+from .interface import IRepo
 from src.domain.room import Room
+from src.dto.room_list import RoomListDto
 
 
 class MemRepo(IRepo):
@@ -9,7 +10,7 @@ class MemRepo(IRepo):
         self._data = data
 
     
-    def list(self, filters: Filters = Filters()) -> List[Room]:
+    def list(self, filters: RoomListDto.Read = RoomListDto.Read()) -> List[Room]:
         result = [Room.model_validate(x) for x in self._data]
         
         if filters.code__eq:

@@ -2,8 +2,9 @@ from typing import List, Dict, Any
 import pymongo
 from pydantic import BaseModel
 
-from .interface import IRepo, Filters
+from .interface import IRepo
 from src.domain import room
+from src.dto.room_list import RoomListDto
 
 
 class MongoConfig(BaseModel):
@@ -31,7 +32,7 @@ class MongoRepo(IRepo):
         return [room.Room.model_validate(res) for res in results]
     
 
-    def list(self, filters: Filters = Filters()) -> List[room.Room]:
+    def list(self, filters: RoomListDto = RoomListDto()) -> List[room.Room]:
         collection = self.db.rooms
 
         mongo_filter = {}

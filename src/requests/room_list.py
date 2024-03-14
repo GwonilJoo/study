@@ -4,6 +4,8 @@ from dataclasses import dataclass
 from collections.abc import Mapping
 from typing import Dict, Any
 
+from src.dto.room_list import RoomListDto
+
 
 class RoomListRequest:
     accepted_filters = {"code__eq", "price__eq", "price__lt", "price__gt"}
@@ -52,7 +54,7 @@ class RoomListRequest:
 
 class RoomListValidRequest:
     def __init__(self, filters: Dict[str, Any]) -> None:
-        self.filters = filters
+        self.filters: RoomListDto.Read = RoomListDto.read(filters)
 
     def __bool__(self) -> bool:
         return True

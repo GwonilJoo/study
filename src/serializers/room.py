@@ -1,10 +1,10 @@
 import json
 
-from src.domain.room import Room
+from src.dto.room_list import RoomListDto
 
 
 class RoomJsonEncoder(json.JSONEncoder):
-    def default(self, o: Room):
+    def default(self, o: RoomListDto.Response):
         try:
             to_serialize = {
                 'code': str(o.code),

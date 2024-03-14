@@ -6,7 +6,8 @@ from sqlalchemy.orm import sessionmaker
 from pydantic import BaseModel
 
 from src.domain import room
-from src.repository.interface import IRepo, Filters
+from src.dto.room_list import RoomListDto
+from src.repository.interface import IRepo
 from .postgres_objects import Base, Room
 
 
@@ -39,7 +40,7 @@ class PostgresRepo(IRepo):
         ]
     
 
-    def list(self, filters: Filters = Filters()) -> List[room.Room]:
+    def list(self, filters: RoomListDto.Read = RoomListDto.Read()) -> List[room.Room]:
         DBSession = sessionmaker(bind=self.engine)
         session = DBSession()
 
