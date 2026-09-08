@@ -1,0 +1,41 @@
+# 대응하는 명령어:
+#   kubectl create deployment web --image=nginx --replicas=3
+#
+# 명령어와 이 파일의 결과물은 같다. 다만 이 파일은
+#   - 이미지 버전을 고정했고 (명령어는 nginx:latest 를 쓴다)
+#   - 자동으로 채워지던 라벨을 눈에 보이게 적었다
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  labels:
+    app: web
+spec:
+  replicas: 3
+
+  # 이 디플로이먼트가 관리할 파드를 고르는 조건.
+  # 서비스의 selector 와 문법이 다르다 (여기는 matchLabels 가 한 단계 더 있다).
+  selector:
+    matchLabels:
+      app: web
+
+  # 파드를 찍어낼 틀. 이 내용이 바뀌면 pod-template-hash 가 바뀌고,
+  # 새 레플리카셋이 생기면서 롤링 업데이트가 일어난다.
+  template:
+    metadata:
+      labels:
+        app: web # ← 위 matchLabels 와 반드시 일치해야 한다
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.31.5 # 재현을 위해 latest 대신 패치 버전까지 고정
+          ports:
+            - containerPort: 80
+          # 자원을 명시하지 않으면 QoS Class 가 BestEffort 가 되어
+          # 노드 메모리 부족 시 가장 먼저 죽는다.
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+            limits:
+              memory: 64Mi

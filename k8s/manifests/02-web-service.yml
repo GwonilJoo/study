@@ -1,0 +1,25 @@
+# 대응하는 명령어:
+#   kubectl expose deployment web --port=80
+#
+# expose 는 디플로이먼트의 selector 를 복사해 온다.
+# 여기서는 그 값을 직접 적었다.
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+spec:
+  type: ClusterIP # 기본값. 클러스터 내부에서만 접근 가능
+
+  # 주의: 서비스의 selector 는 matchLabels 없이 평평하다.
+  # matchLabels 를 적으면 에러가 난다.
+  #
+  # pod-template-hash 를 넣지 않는 것이 중요하다.
+  # 넣으면 롤링 업데이트 때 새 파드를 못 찾아 서비스가 텅 빈다.
+  selector:
+    app: web
+
+  ports:
+    - name: http
+      port: 80 # 서비스가 받는 포트 (http://web:80)
+      targetPort: 80 # 파드로 넘길 포트 (컨테이너의 containerPort)
+      protocol: TCP

@@ -1,0 +1,34 @@
+# 실습용: 일부러 Pending 을 만든다.
+#
+# 어떤 노드도 100Gi 를 줄 수 없으므로 파드 3개가 전부 Pending 에 머문다.
+# 쿠버네티스는 자원이 부족하면 억지로 밀어넣지 않고 자리가 생길 때까지 기다린다.
+#
+# 확인:
+#   kubectl get pods
+#   kubectl describe pod <파드이름>       → Node: <none>, PodScheduled: False
+#   kubectl get events --field-selector reason=FailedScheduling
+#
+# 정리:
+#   kubectl delete -f manifests/03-heavy-pending.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: heavy
+  labels:
+    app: heavy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: heavy
+  template:
+    metadata:
+      labels:
+        app: heavy
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.31.5
+          resources:
+            requests:
+              memory: 100Gi # ← 스케줄러가 보는 값. 이것 때문에 배치가 안 된다

@@ -1,0 +1,33 @@
+# 대응하는 명령어:
+#   kubectl run loadtest --image=busybox --restart=Never -- \
+#     sh -c 'for i in $(seq 1 30); do wget -qO- http://web; done'
+#
+# 서비스의 부하 분산을 관찰하는 일회용 파드.
+#
+# 주의: -it (attach) 를 쓰면 컨테이너가 너무 빨리 끝나 출력이 유실된다.
+#       측정이 목적이면 붙지 말고 끝난 뒤 로그를 읽는다.
+#
+# 사전 준비 — 파드를 구분할 수 있게 만들기:
+#   for p in $(kubectl get pods -l app=web -o name); do
+#     kubectl exec $p -- sh -c 'echo $HOSTNAME > /usr/share/nginx/html/index.html'
+#   done
+#
+# 실행:
+#   kubectl apply -f manifests/04-loadtest-pod.yml
+#   kubectl wait --for=jsonpath='{.status.phase}'=Succeeded pod/loadtest --timeout=120s
+#   kubectl logs loadtest | sort | uniq -c
+#   kubectl delete -f manifests/04-loadtest-pod.yml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: loadtest
+spec:
+  # 끝나면 다시 살리지 않는다. kubectl run --restart=Never 에 해당한다.
+  restartPolicy: Never
+  containers:
+    - name: busybox
+      image: busybox:1.38.0
+      command:
+        - sh
+        - -c
+        - "for i in $(seq 1 30); do wget -qO- http://web; done"

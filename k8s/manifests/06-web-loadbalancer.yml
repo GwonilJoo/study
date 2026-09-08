@@ -1,0 +1,35 @@
+# 대응하는 명령어:
+#   kubectl expose deployment web --name=web-lb --port=80 --type=LoadBalancer
+#
+# kind 에서는 EXTERNAL-IP 가 영원히 <pending> 이다.
+# 실제 로드밸런서를 만들어줄 cloud-controller-manager 가 없기 때문.
+# 에러도 나지 않는다 — "실패"가 아니라 "처리 중"으로 멈춘 상태다.
+#
+#   kubectl get svc web-lb
+#   NAME     TYPE           EXTERNAL-IP   PORT(S)
+#   web-lb   LoadBalancer   <pending>     80:32200/TCP
+#                                            └─ NodePort 도 자동으로 생긴다
+#
+#   kubectl get pods -n kube-system | grep -i cloud    # 없음
+#
+# 이 매니페스트는 "안 되는 것을 확인하는 용도"다.
+# 실제로 동작시키는 것은 AWS 단계(로드맵 Day 20).
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-lb
+spec:
+  type: LoadBalancer
+  selector:
+    app: web
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      protocol: TCP
+
+  # externalTrafficPolicy: Local 로 바꾸면
+  # healthCheckNodePort 가 자동으로 배정된다 (직접 적지 않는다).
+  # 로드밸런서가 그 포트로 각 노드에 "이 서비스 파드 있냐"를 묻는다.
+  # LoadBalancer 타입에서만 생긴다 — NodePort 타입은 Local 로 해도 안 생긴다.
+  # externalTrafficPolicy: Local
